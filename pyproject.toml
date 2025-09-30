@@ -6,10 +6,10 @@ authors = ["buhariabubakar <buharikwmbo@yahoo.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 
 spiffworkflow-connector-command = {git = "https://github.com/sartography/spiffworkflow-connector-command.git", rev = "main"}
-twilio = "^9.8.3"
+twilio = ">=8.0.0"
 
 
 [build-system]
