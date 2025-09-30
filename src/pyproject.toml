@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "connector-twilio"
+version = "0.1.0"
+description = "This connector will send sms using the Twilio"
+authors = ["buhariabubakar <buharikwmbo@yahoo.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+spiffworkflow-connector-command = {git = "https://github.com/sartography/spiffworkflow-connector-command.git", rev = "main"}
+twilio = "^9.8.3"
+fastapi = "^0.118.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
