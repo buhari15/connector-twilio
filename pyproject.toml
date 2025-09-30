@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "connector-twilio"
-version = "0.1.0"
+version = "0.1.1"
 description = "This connector will send sms using the Twilio"
 authors = ["buhariabubakar <buharikwmbo@yahoo.com>"]
 readme = "README.md"
