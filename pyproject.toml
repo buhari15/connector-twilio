@@ -9,7 +9,7 @@ packages = [{include = "connector_twilio", from = "src" }]
 [tool.poetry.dependencies]
 python = "^3.11"
 spiffworkflow-connector-command = {git = "https://github.com/sartography/spiffworkflow-connector-command.git", rev = "main"}
-twilio = "^9.0.0"
+twilio = "*"
 
 
 [build-system]
