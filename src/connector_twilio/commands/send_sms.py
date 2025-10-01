@@ -65,6 +65,10 @@ class SendSMSCommand(ConnectorCommand):
             CommandResultDictV1: Result of the command execution.
         """
         try:
+            # Convert to string if Config or other object types are passed
+            to_phone_number = str(to_phone_number)
+            message_body = str(message_body)
+
             # Validate recipient phone number
             validated_to = self._validate_phone_number(to_phone_number)
 
