@@ -85,7 +85,8 @@ class SendSMSCommand(ConnectorCommand):
                     "timestamp": datetime.utcnow().isoformat(),
                     "details": f"Message sent to {validated_to}"
                 },
-                "status": 200
+                "status": 200,
+                "mimetype": "application/json"
             }
         except TwilioRestException as e:
             logger.error(f"Twilio API error: {e.code} - {e.msg}")
@@ -96,7 +97,8 @@ class SendSMSCommand(ConnectorCommand):
                     "error_message": e.msg,
                     "timestamp": datetime.utcnow().isoformat()
                 },
-                "status": 400
+                "status": 400,
+                "mimetype": "application/json"
             }
         except ValueError as e:
             logger.error(f"Validation error: {e}")
@@ -106,7 +108,8 @@ class SendSMSCommand(ConnectorCommand):
                     "error_message": str(e),
                     "timestamp": datetime.utcnow().isoformat()
                 },
-                "status": 400
+                "status": 400,
+                "mimetype": "application/json"
             }
         except Exception as e:
             logger.error(f"Unexpected error: {e}")
@@ -116,5 +119,6 @@ class SendSMSCommand(ConnectorCommand):
                     "error_message": str(e),
                     "timestamp": datetime.utcnow().isoformat()
                 },
-                "status": 500
+                "status": 500,
+                "mimetype": "application/json"
             }
