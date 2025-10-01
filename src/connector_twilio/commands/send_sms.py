@@ -9,6 +9,12 @@ from twilio.base.exceptions import TwilioRestException
 logger = logging.getLogger(__name__)
 
 
+def _extract_value(value):
+    """Extract actual value from Config objects or return as-is if string."""
+    if hasattr(value, 'value'):
+        return str(value.value)
+    return str(value)
+
 
 class SendSMSCommand(ConnectorCommand):
     """
@@ -16,10 +22,10 @@ class SendSMSCommand(ConnectorCommand):
     """
 
     def __init__(self, account_sid: str, auth_token: str, from_phone_number: str):
-        # Convert to string if Config or other object types are passed
-        self.account_sid = str(account_sid)
-        self.auth_token = str(auth_token)
-        self.from_phone_number = self._validate_phone_number(str(from_phone_number))
+        # Extract actual values from Config objects or convert to string
+        self.account_sid = _extract_value(account_sid)
+        self.auth_token = _extract_value(auth_token)
+        self.from_phone_number = self._validate_phone_number(_extract_value(from_phone_number))
         try:
             self.client = Client(self.account_sid, self.auth_token)
             # Validate credentials by fetching account info
@@ -65,9 +71,9 @@ class SendSMSCommand(ConnectorCommand):
             CommandResultDictV1: Result of the command execution.
         """
         try:
-            # Convert to string if Config or other object types are passed
-            to_phone_number = str(to_phone_number)
-            message_body = str(message_body)
+            # Extract actual values from Config objects or convert to string
+            to_phone_number = _extract_value(to_phone_number)
+            message_body = _extract_value(message_body)
 
             # Validate recipient phone number
             validated_to = self._validate_phone_number(to_phone_number)
