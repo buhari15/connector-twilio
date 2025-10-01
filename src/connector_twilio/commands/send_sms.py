@@ -77,36 +77,44 @@ class SendSMSCommand(ConnectorCommand):
 
             logger.info(f"SMS sent successfully. SID: {message.sid}")
             return {
-                "status": 200,
-                "message_sid": message.sid,
-                "to": validated_to,
-                "from": self.from_phone_number,
-                "status_code": message.status,
-                "timestamp": datetime.utcnow().isoformat(),
-                "details": f"Message sent to {validated_to}"
+                "response": {
+                    "message_sid": message.sid,
+                    "to": validated_to,
+                    "from": self.from_phone_number,
+                    "status_code": message.status,
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "details": f"Message sent to {validated_to}"
+                },
+                "status": 200
             }
         except TwilioRestException as e:
             logger.error(f"Twilio API error: {e.code} - {e.msg}")
             return {
-                "status": 400,
-                "error_type": "TwilioRestException",
-                "error_code": e.code,
-                "error_message": e.msg,
-                "timestamp": datetime.utcnow().isoformat()
+                "response": {
+                    "error_type": "TwilioRestException",
+                    "error_code": e.code,
+                    "error_message": e.msg,
+                    "timestamp": datetime.utcnow().isoformat()
+                },
+                "status": 400
             }
         except ValueError as e:
             logger.error(f"Validation error: {e}")
             return {
-                "status": 400,
-                "error_type": "ValueError",
-                "error_message": str(e),
-                "timestamp": datetime.utcnow().isoformat()
+                "response": {
+                    "error_type": "ValueError",
+                    "error_message": str(e),
+                    "timestamp": datetime.utcnow().isoformat()
+                },
+                "status": 400
             }
         except Exception as e:
             logger.error(f"Unexpected error: {e}")
             return {
-                "status": 500,
-                "error_type": type(e).__name__,
-                "error_message": str(e),
-                "timestamp": datetime.utcnow().isoformat()
+                "response": {
+                    "error_type": type(e).__name__,
+                    "error_message": str(e),
+                    "timestamp": datetime.utcnow().isoformat()
+                },
+                "status": 500
             }
