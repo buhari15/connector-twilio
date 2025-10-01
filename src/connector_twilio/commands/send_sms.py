@@ -11,8 +11,30 @@ logger = logging.getLogger(__name__)
 
 def _extract_value(value):
     """Extract actual value from Config objects or return as-is if string."""
-    if hasattr(value, 'value'):
-        return str(value.value)
+    # If it's already a string, return it
+    if isinstance(value, str):
+        return value
+
+    # If it's a basic type (int, float, bool), convert to string
+    if isinstance(value, (int, float, bool)):
+        return str(value)
+
+    # Try common attribute names for config-like objects
+    for attr in ['value', '_value', 'data', '_data', 'get_value']:
+        if hasattr(value, attr):
+            try:
+                attr_value = getattr(value, attr)
+                # If it's a callable, try calling it
+                if callable(attr_value):
+                    result = attr_value()
+                    if isinstance(result, str):
+                        return result
+                elif isinstance(attr_value, str):
+                    return attr_value
+            except Exception:
+                continue
+
+    # Last resort: convert to string
     return str(value)
 
 
