@@ -16,6 +16,13 @@ class SendSMSCommand(ConnectorCommand):
     """
 
     def __init__(self, account_sid: str, auth_token: str, from_phone_number: str):
+        
+        if not isinstance(account_sid, str):
+            raise ValueError(f"account_sid must be a string, got {type(account_sid).__name__}")
+        if not isinstance(auth_token, str):
+            raise ValueError(f"auth_token must be a string, got {type(auth_token).__name__}")
+        if not isinstance(from_phone_number, str):
+            raise ValueError(f"from_phone_number must be a string, got {type(from_phone_number).__name__}")
         self.account_sid = account_sid
         self.auth_token = auth_token
         self.from_phone_number = self._validate_phone_number(from_phone_number)
@@ -76,7 +83,7 @@ class SendSMSCommand(ConnectorCommand):
 
             logger.info(f"SMS sent successfully. SID: {message.sid}")
             return {
-                "status": "success",
+                "status": 200,
                 "message_sid": message.sid,
                 "to": validated_to,
                 "from": self.from_phone_number,
@@ -87,7 +94,7 @@ class SendSMSCommand(ConnectorCommand):
         except TwilioRestException as e:
             logger.error(f"Twilio API error: {e.code} - {e.msg}")
             return {
-                "status": "error",
+                "status": 400,
                 "error_type": "TwilioRestException",
                 "error_code": e.code,
                 "error_message": e.msg,
@@ -96,7 +103,7 @@ class SendSMSCommand(ConnectorCommand):
         except ValueError as e:
             logger.error(f"Validation error: {e}")
             return {
-                "status": "error",
+                "status": 400,
                 "error_type": "ValueError",
                 "error_message": str(e),
                 "timestamp": datetime.utcnow().isoformat()
@@ -104,7 +111,7 @@ class SendSMSCommand(ConnectorCommand):
         except Exception as e:
             logger.error(f"Unexpected error: {e}")
             return {
-                "status": "error",
+                "status": 500,
                 "error_type": type(e).__name__,
                 "error_message": str(e),
                 "timestamp": datetime.utcnow().isoformat()
