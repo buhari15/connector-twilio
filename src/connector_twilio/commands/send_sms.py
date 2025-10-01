@@ -16,16 +16,10 @@ class SendSMSCommand(ConnectorCommand):
     """
 
     def __init__(self, account_sid: str, auth_token: str, from_phone_number: str):
-        
-        if not isinstance(account_sid, str):
-            raise ValueError(f"account_sid must be a string, got {type(account_sid).__name__}")
-        if not isinstance(auth_token, str):
-            raise ValueError(f"auth_token must be a string, got {type(auth_token).__name__}")
-        if not isinstance(from_phone_number, str):
-            raise ValueError(f"from_phone_number must be a string, got {type(from_phone_number).__name__}")
-        self.account_sid = account_sid
-        self.auth_token = auth_token
-        self.from_phone_number = self._validate_phone_number(from_phone_number)
+        # Convert to string if Config or other object types are passed
+        self.account_sid = str(account_sid)
+        self.auth_token = str(auth_token)
+        self.from_phone_number = self._validate_phone_number(str(from_phone_number))
         try:
             self.client = Client(self.account_sid, self.auth_token)
             # Validate credentials by fetching account info
